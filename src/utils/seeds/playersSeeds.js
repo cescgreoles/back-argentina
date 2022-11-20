@@ -1,6 +1,8 @@
 const { mongoose } = require("mongoose");
 const Player = require("../../api/players/players.model");
-const { DB_URL } = require("../database/db.js");
+
+DB_URL =
+  "mongodb+srv://root:root@cluster0.aojqb2p.mongodb.net/Argentina?retryWrites=true&w=majority";
 
 const players = [
   {

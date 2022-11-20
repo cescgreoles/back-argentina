@@ -7,7 +7,7 @@ const deleteFile = require("../../middlewares/deleteFile");
 
 router.get("/", async (req, res, next) => {
   try {
-    const allPlayers = await Player.find().populate("sport").populate("team");
+    const allPlayers = await Player.find();
     return res.status(200).json(allPlayers);
   } catch (error) {
     return next(error);
@@ -87,12 +87,10 @@ router.put(
       const playerModify = new Player(player);
       playerModify._id = id;
       const playerUpdated = await Player.findByIdAndUpdate(id, playerModify);
-      return res
-        .status(200)
-        .json({
-          mensaje: "Se ha conseguido editar el jugador",
-          playerModificado: playerUpdated,
-        });
+      return res.status(200).json({
+        mensaje: "Se ha conseguido editar el jugador",
+        playerModificado: playerUpdated,
+      });
     } catch (error) {
       return next(error);
     }
