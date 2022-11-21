@@ -1,8 +1,7 @@
 const express = require("express");
 const Player = require("./players.model");
 const router = express.Router();
-const { isAuth, isAdmin } = require("../../middlewares/auth");
-const upload = require("../../middlewares/file");
+
 const deleteFile = require("../../middlewares/deleteFile");
 
 router.get("/", async (req, res, next) => {
@@ -36,14 +35,11 @@ router.get("/getbyname/:name", async (req, res, next) => {
 
 router.post(
   "/create",
-  [isAuth],
-  upload.single("img"),
+
   async (req, res, next) => {
+    console.log(req.body);
     try {
       const player = req.body;
-      if (req.file) {
-        player.img = req.file.path;
-      }
       const newPlayer = new Player(player);
       const created = await newPlayer.save();
       return res.status(201).json(created);
@@ -53,13 +49,10 @@ router.post(
   }
 );
 
-router.delete("/delete/:id", [isAdmin], async (req, res, next) => {
+router.delete("/delete/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
     const player = await Player.findById(id);
-    if (player.img) {
-      deleteFile(player.img);
-    }
     const playerToDelete = await Player.findByIdAndDelete(id);
     return res
       .status(200)
@@ -71,8 +64,7 @@ router.delete("/delete/:id", [isAdmin], async (req, res, next) => {
 
 router.put(
   "/edit/:id",
-  [isAdmin],
-  upload.single("img"),
+
   async (req, res, next) => {
     try {
       const id = req.params.id;
